@@ -1,0 +1,19 @@
+version: '3'
+services:
+    pureftpd:
+        hostname: pureftpd
+        image: fsimplice/pure-ftpd:latest
+        container_name: pureftpd
+        volumes:
+            - /path/to/dir:/share/ftp:ro
+        ports:
+            - "21:21"
+            - "10000-10009:10000-10009"
+        environment:
+            - FTP_USER=myuser
+            - FTP_PASSWORD=mypassword
+            - FTP_HOME_DIRECTORY=/share/ftp
+            - PUBLICHOST=<your_public_host_address>
+            - PASV_PORT_MIN=10000
+            - PASV_PORT_MAX=10009
+
