@@ -10,7 +10,8 @@ ENV FTP_USER=ftpuser \
     MAX_CLIENTS_PER_IP=10 \
     DOWNLOAD_LIMIT_KB=0 \
     UPLOAD_LIMIT_KB=0 \
-    MAX_SIMULTANEOUS_SESSIONS=0
+    MAX_SIMULTANEOUS_SESSIONS=0 \
+    LOG_ENABLED=0
 
 COPY run.sh /pure-ftpd/run.sh
 RUN chmod u+x /pure-ftpd/run.sh

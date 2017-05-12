@@ -5,6 +5,8 @@ echo "##########################################################################
 echo "Starting container"
 echo "##############################################################################"
 
+ADDED_OPTS=""
+
 #
 # Checking password file
 #
@@ -32,13 +34,28 @@ else
     (pure-pw show ${FTP_USER} | grep -v "Password")
 fi
 
+#
+# Checking log status
+#
+if [ "${LOG_ENABLED}" = "1" ]; then
+    echo "Pure-ftp log enabled."
+
+    echo "Starting rsyslogd."
+    rsyslogd
+
+    ADDED_OPTS="--verboselog -O clf:/var/log/pure-ftpd/pureftpd-clf.log"
+else
+    echo "Pure-ftpd log disabled."
+fi
+
+echo "Using added opts '${ADDED_OPTS}'"
 
 echo "Launching pure-ftpd server ..."
 /usr/sbin/pure-ftpd \
                 -c ${MAX_CLIENTS_NUMBER} -C ${MAX_CLIENTS_PER_IP} \
                 -l puredb:/etc/pure-ftpd/pureftpd.pdb \
                 -E -j -R \
-                --verboselog \
                 -P $PUBLICHOST \
-                -p ${PASV_PORT_MIN}:${PASV_PORT_MAX}
-
+                -p ${PASV_PORT_MIN}:${PASV_PORT_MAX} \
+                -H \
+                ${ADDED_OPTS}
